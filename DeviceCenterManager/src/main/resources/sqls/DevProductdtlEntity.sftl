@@ -1,0 +1,2 @@
+--deleteByProductfk
+delete from dev_productdtl where productfk=:productfk

@@ -1,0 +1,82 @@
+spring:
+  application:
+    name: ${APPLICATION_NAME:devicecenter}
+  datasource:
+    #配置数据库连接地址
+    url: ${DATASOURCE_URL:jdbc:mysql://127.0.0.1:3306/elsi-trunk?useUnicode=true&characterEncoding=utf-8}
+    username: ${DATASOURCE_USERNAMR:root}
+    password: ${DATASOURCE_PASSWORD:123}
+  redis:
+    #是否启用
+    enable: true
+    #单机用的host/port
+    host: 192.168.20.240
+    port: 6379
+    #超时
+    timeout: 16000
+    #数据库索引
+    database: 1
+    #密码
+    password: 123456
+    jedis:
+      pool:
+        max-active: 1000
+        max-wait: -1
+        max-idle: 300
+        min-idle: 0
+  rabbitmq:
+    #是否启用
+    enable: true
+    #服务地址
+    host: 192.168.20.240
+    port: 5672
+    username: imcsoft
+    password: iotimc.12345
+    publisher-confirm: true
+    virtual-host: /
+    command-topic: datacentercommand
+    data-topic: datacenterdata
+    login-topic: datacenterlogin
+    #1是数据 2是登录 3是控制
+    default-topic: 1
+config:
+  retry: 3
+  es:
+    data-event: dataLog
+    login-event: loginLog
+server:
+  port: ${SERVER_PORT:8807}
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_LIST:http://iotimc:imcsoft.12345@eserver.iotdev.top/eureka}
+elsi:
+  swagger:
+    #文档标题
+    title: 设备接入平台
+    #文档描述
+    description: 提供设备接入服务与接口
+    #文档版本号
+    version: 1.0
+  mode: ${ELSI_MODE:dev}
+  #配置云端的地址信息
+  remote:
+    #云端网关地址
+    gateway: ${ELSI_REMOTE_GATEWAY:api.iotdev.top/admin}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+    logfile:
+      enabled: true
+      sensitive: false
+    shutdown:
+      enabled: true
+logging:
+  file: ${LOGGER_HOME}/devicecenter/logs/log.log
+  level:
+      com.iotimc: DEBUG

@@ -1,0 +1,31 @@
+version: '3.2'
+services:
+  # 模块名
+  NBLamp:
+    # 容器内机器名模块名
+    container_name: devicecenter
+    # 模块基于当前目录的相对路径
+    build: ./DeviceCenterManager/
+    # 在本机docker镜像仓库的镜像名
+    image: elsi/devicecenter
+    # 导出端口
+    ports:
+      - '9797:9797'
+      - '8808:8808'
+    environment:
+      LANG: C.UTF-8
+      EUREKA_SERVER_LIST: http://iotimc:imcsoft.12345@elsi-eserver:9000/eureka/
+      DATASOURCE_URL: jdbc:mysql://rm-wz97r87bwuro0g5a66o.mysql.rds.aliyuncs.com:3306/elsi-trunk?useUnicode=true&characterEncoding=utf-8
+      DATASOURCE_USERNAMR: elsi-trunk
+      DATASOURCE_PASSWORD: imcsoft.12345
+      APPLICATION_NAME: devicecenter
+      ELSI_REMOTE_GATEWAY:
+    volumes:
+      - '/tmp:/tmp'
+      - '/usr/log:/usr/log'
+    # 需要先在本机docker环境创建一个网络
+    networks:
+      - elsi-trunk
+networks:
+  elsi-trunk:
+    external: true

@@ -1,0 +1,38 @@
+--getList
+select * from dev_product
+
+--getAll
+select
+  roof.id as roofid,
+  roof.name as roofname,
+  roof.alias as roofalias,
+  roof.token as rooftoken,
+  roof.apikey as roofapikey,
+  roof.companyfk as companyfk,
+  dtl.id as dtlid,
+  dtl.objid,
+  dtl.resid,
+  dtl.insid,
+  dtl.name,
+  dtl.type,
+  dtl.alias,
+  dtl.ishex,
+  dtl.writeable as writeable,
+  dtl.correct,
+  company.name as companyname,
+  company.alias as companyalias,
+  company.baseurl as baseurl,
+  company.username,
+  company.password,
+  company.apikey as companyapikey,
+  company.token as companytoken,
+  company.systemname
+from dev_product roof
+left join dev_productdtl dtl on dtl.productfk = roof.id
+left join dev_company company on company.id = roof.companyfk
+where roof.status = 'P'
+    and dtl.status = 'P'
+  <#if productid??>
+      and roof.id = :productid
+  </#if>
+order by company.name,roof.name,dtl.name
