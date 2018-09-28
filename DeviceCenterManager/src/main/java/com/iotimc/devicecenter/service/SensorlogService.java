@@ -1,7 +1,5 @@
 package com.iotimc.devicecenter.service;
 
-import com.iotimc.devicecenter.domain.DevSensorlogEntity;
-
 import java.util.List;
 import java.util.Map;
 

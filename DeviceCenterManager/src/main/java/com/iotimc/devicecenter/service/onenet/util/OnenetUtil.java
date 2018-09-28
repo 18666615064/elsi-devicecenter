@@ -1,6 +1,5 @@
 package com.iotimc.devicecenter.service.onenet.util;
 
-import ch.qos.logback.core.rolling.helper.IntegerTokenConverter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -12,7 +11,6 @@ import com.iotimc.devicecenter.listener.ConfigListener;
 import com.iotimc.devicecenter.listener.DeviceListener;
 import com.iotimc.devicecenter.util.RedisUtil;
 import com.iotimc.devicecenter.util.Tool;
-import com.iotimc.elsi.auth.bean.UserToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -381,7 +379,7 @@ public class OnenetUtil {
                 url += Tool.joinHttpParam(params, "&");
             }
             log.debug("=GET=========================\n正在请求：{}", url);
-            java.net.URL urlObj = new URL(url);
+            URL urlObj = new URL(url);
             HttpURLConnection conn = (HttpURLConnection) urlObj.openConnection();
             conn.setRequestMethod("GET");
             conn.setConnectTimeout(5000);

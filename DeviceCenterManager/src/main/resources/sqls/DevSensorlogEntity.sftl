@@ -21,7 +21,8 @@ select log.id,
   log.value,
   log.dsid,
   log.name,
-  date_format(cretime , '%Y-%m-%d %H:%i:%s') as cretime,
+  unix_timestamp(cretime) * 1000 as cretime,
+  date_format(cretime , '%Y-%m-%d %H:%i:%s') as cretimestr,
   log.imei
 from dev_sensorlog log
 where log.name = :name

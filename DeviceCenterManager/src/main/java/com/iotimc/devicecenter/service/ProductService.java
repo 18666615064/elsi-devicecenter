@@ -1,6 +1,5 @@
 package com.iotimc.devicecenter.service;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.iotimc.devicecenter.domain.DevProductEntity;
 import org.springframework.data.domain.Page;

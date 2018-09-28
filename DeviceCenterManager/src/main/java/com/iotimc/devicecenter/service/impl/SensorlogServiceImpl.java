@@ -1,7 +1,6 @@
 package com.iotimc.devicecenter.service.impl;
 
 import com.iotimc.devicecenter.dao.DevSensorlogRepository;
-import com.iotimc.devicecenter.domain.DevSensorlogEntity;
 import com.iotimc.devicecenter.service.SensorlogService;
 import com.iotimc.devicecenter.util.Tool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,6 @@ public class SensorlogServiceImpl implements SensorlogService {
     public List<Map> getLast(String imei, int size, String name) {
         List<Map> list = devSensorlogRepository.getLast(imei, name, size);
         List<String> daylist = new ArrayList<>();
-        if(list.isEmpty()) return list;
         String mincretime = (String)list.get(list.size() - 1).get("cretime");
         mincretime = mincretime.split(" ")[0];
         daylist = Tool.createRangeMonth(Tool.strToDate(mincretime), Tool.getNowDate(), size, true);
