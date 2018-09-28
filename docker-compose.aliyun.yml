@@ -15,6 +15,9 @@ services:
       APPLICATION_NAME: devicecenter
       ELSI_REMOTE_GATEWAY:
       ZIPKIN_SERVER: http://elsi-zipkin:9455
+      REDIS_HOST: redis
+      REDIS_PASS:
+      MQ_HOST: rabbitmq
     volumes:
       - '/tmp:/tmp'
       - '/usr/log:/usr/log'
