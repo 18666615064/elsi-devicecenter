@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -50,6 +51,11 @@ public class Tool {
             return dateFormat.parse(str);
         } catch(Exception e) {}
         return null;
+    }
+
+    public static Long getTimestampLong(Date date) {
+        return date.getTime();
+        //Timestamp.valueOf(dateTimeFormat.format(date)).getTime();
     }
 
     public static Timestamp long2timestamp(long time) {

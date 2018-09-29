@@ -1,6 +1,5 @@
 package com.iotimc.devicecenter.controller;
 
-import com.iotimc.devicecenter.domain.DevSensorlogEntity;
 import com.iotimc.devicecenter.service.SensorlogService;
 import com.iotimc.elsi.auth.annotation.NoneAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +32,9 @@ public class SensorlogController {
      * 获取最新的n组读数数据
      */
     @RequestMapping(value = "/top", method = RequestMethod.GET)
-    public List<Map> getTopSensorlog(@RequestParam(value = "size", required = false) Integer size, @RequestParam("imei")String imei, @RequestParam(value = "name")String name) {
+    public List<Map> getTopSensorlog(@RequestParam(value = "size", required = false) Integer size, @RequestParam("imei")String imei, @RequestParam(value = "name")String name, @RequestParam(required = false, value = "value")String value) {
         size = size == null? 1 : size;
-        return sensorlogService.getTop(imei, size, name);
+        return sensorlogService.getTop(imei, size, name, value);
     }
 
     @RequestMapping(value = "/last", method = RequestMethod.GET)

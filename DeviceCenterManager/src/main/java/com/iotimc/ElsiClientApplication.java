@@ -19,6 +19,7 @@ public class ElsiClientApplication extends ElsiAuthAgencyApplication {
 		if (StringUtils.isBlank(System.getProperty("LOGGER_HOME"))) {
 			System.setProperty("LOGGER_HOME", ElsiClientApplication.class.getResource("/").getPath());
 		}
+
 		SpringApplication.run(ElsiClientApplication.class, args);
 	}
 }

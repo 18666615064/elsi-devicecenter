@@ -2,7 +2,6 @@ package com.iotimc.devicecenter.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.iotimc.devicecenter.domain.DevProductdtlEntity;
 import com.iotimc.devicecenter.domain.DeviceCache;
 import com.iotimc.devicecenter.domain.ProductConfig;
 import com.iotimc.devicecenter.listener.ConfigListener;
@@ -12,13 +11,11 @@ import com.iotimc.devicecenter.service.ProductService;
 import com.iotimc.devicecenter.util.Tool;
 import com.iotimc.elsi.auth.annotation.NoneAuthorize;
 import com.iotimc.elsi.msg.common.HandleEntitySuccessMsg;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @NoneAuthorize
 @RestController

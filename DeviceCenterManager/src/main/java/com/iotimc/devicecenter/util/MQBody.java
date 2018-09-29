@@ -3,6 +3,7 @@ package com.iotimc.devicecenter.util;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 public class MQBody implements Serializable{
     private String event;

@@ -18,12 +18,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
-import java.util.Map;
 
 
 @NoneAuthorize
@@ -284,7 +282,7 @@ public class DeviceController {
 
     @RequestMapping(value = "/pagebyproduct", method = RequestMethod.GET)
     public ResponseEntity<Page<DevDeviceEntity>> pagebyProduct(@RequestParam("id") Integer id, @RequestParam("page") PageRequestBean pageRequestBean,
-                                                   @RequestParam("sort") SortRequestBean[] sortRequestBeans) {
+                                                               @RequestParam("sort") SortRequestBean[] sortRequestBeans) {
         pageRequestBean.setPageNum(pageRequestBean.getPageNum() - 1);
         return ResponseEntity.ok(deviceNormalService.devicePageByProduct(id, pageRequestBean, Arrays.asList(sortRequestBeans)));
     }

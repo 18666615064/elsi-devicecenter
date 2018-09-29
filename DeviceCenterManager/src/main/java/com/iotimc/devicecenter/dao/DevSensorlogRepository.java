@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface DevSensorlogRepository extends GenericJpaRepository<DevSensorlogEntity, Integer> {
     @TemplateQuery
-    List<Map> getTop(@Param("imei") String imei, @Param("name") String name, @Param("size") int size);
+    List<Map> getTop(@Param("imei") String imei, @Param("name") String name, @Param("value") String value, @Param("size") int size);
 
     @TemplateQuery
     List<Map> getLast(@Param("imei") String imei, @Param("name") String name, @Param("size") int size);

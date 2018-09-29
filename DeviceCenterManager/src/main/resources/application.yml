@@ -3,9 +3,9 @@ spring:
     name: ${APPLICATION_NAME:devicecenter_dev}
   datasource:
     #配置数据库连接地址
-    url: ${DATASOURCE_URL:jdbc:mysql://rm-wz97r87bwuro0g5a66o.mysql.rds.aliyuncs.com:3306/elsi-trunk?useUnicode=true&characterEncoding=utf-8}
-    username: ${DATASOURCE_USERNAMR:elsi-trunk}
-    password: ${DATASOURCE_PASSWORD:imcsoft.12345}
+    url: ${DATASOURCE_URL:jdbc:mysql://127.0.0.1:3306/elsi-trunk?useUnicode=true&characterEncoding=utf-8}
+    username: ${DATASOURCE_USERNAMR:root}
+    password: ${DATASOURCE_PASSWORD:123}
   redis:
     #是否启用
     enable: true
@@ -17,7 +17,7 @@ spring:
     #数据库索引
     database: 1
     #密码
-    password:
+    password: 
     jedis:
       pool:
         max-active: 1000

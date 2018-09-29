@@ -2,10 +2,7 @@ package com.iotimc.devicecenter.listener;
 
 import com.alibaba.fastjson.JSONObject;
 import com.iotimc.devicecenter.dao.DevProductEntityRepository;
-import com.iotimc.devicecenter.domain.CompanyConfig;
-import com.iotimc.devicecenter.domain.DevProductdtlEntity;
-import com.iotimc.devicecenter.domain.DeviceCache;
-import com.iotimc.devicecenter.domain.ProductConfig;
+import com.iotimc.devicecenter.domain.*;
 import com.iotimc.devicecenter.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -55,7 +52,7 @@ public class ConfigListener implements InitializingBean{
     public static void readProductConfig(Integer productid) {
         List<Map> list = devProductEntityRepository.getAll(productid);
         // 缓存
-        if(productid != null)
+        if(productid == null)
             companyList.clear();
         list.forEach(item -> {
             CompanyConfig company = null;

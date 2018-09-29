@@ -1,7 +1,6 @@
 package com.iotimc.devicecenter.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.iotimc.devicecenter.domain.DevDeviceEntity;
 import com.iotimc.devicecenter.handler.HandlerFactory;
 import com.iotimc.devicecenter.listener.ConfigListener;
 import com.iotimc.devicecenter.service.onenet.util.OnenetUtil;

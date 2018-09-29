@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.iotimc.devicecenter.util.RedisUtil;
 import com.iotimc.devicecenter.util.WebSocketMessage;
 import com.iotimc.elsi.auth.annotation.NoneAuthorize;
-import com.iotimc.elsi.auth.bean.UserToken;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +16,10 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/es")
@@ -45,7 +47,7 @@ public class ESController {
             PrintWriter out = response.getWriter();
             if(device == null) {
                 // 新添加
-                device = new com.alibaba.fastjson.JSONObject();
+                device = new JSONObject();
                 device.put("messagelist", new JSONArray());
                 getDevicelist().put(imei, device);
             }
@@ -97,6 +99,7 @@ public class ESController {
         return devicelist;
     }
 }
+
 class LifeCycle implements Runnable {
 
     @Override

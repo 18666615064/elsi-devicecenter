@@ -11,6 +11,9 @@ select
 from dev_sensorlog
 where name = :name
     and imei = :imei
+    <#if value ??>
+      and value like concat('%', :value, '%')
+    </#if>
 order by cretime desc
 LIMIT :size
 

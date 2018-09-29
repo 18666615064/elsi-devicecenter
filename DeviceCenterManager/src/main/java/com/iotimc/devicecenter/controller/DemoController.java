@@ -1,6 +1,5 @@
 package com.iotimc.devicecenter.controller;
 
-import com.iotimc.devicecenter.domain.DevDeviceEntity;
 import com.iotimc.devicecenter.domain.DeviceCache;
 import com.iotimc.devicecenter.listener.DeviceListener;
 import com.iotimc.elsi.auth.annotation.NoneAuthorize;
