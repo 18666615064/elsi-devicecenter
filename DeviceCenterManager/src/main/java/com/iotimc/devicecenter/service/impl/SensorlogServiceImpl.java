@@ -4,12 +4,14 @@ import com.iotimc.devicecenter.dao.DevSensorlogRepository;
 import com.iotimc.devicecenter.domain.DevSensorlogEntity;
 import com.iotimc.devicecenter.service.SensorlogService;
 import com.iotimc.devicecenter.util.Tool;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
+@Slf4j
 public class SensorlogServiceImpl implements SensorlogService {
     @Autowired
     private DevSensorlogRepository devSensorlogRepository;
@@ -24,6 +26,9 @@ public class SensorlogServiceImpl implements SensorlogService {
         List<Map> list = devSensorlogRepository.getLast(imei, name, size);
         List<String> daylist = new ArrayList<>();
         if(list.isEmpty()) return list;
+        for(int i=0; i<list.size(); i++) {
+            log.info("List:[{}][{}][{}]", list.get(i).get("id"), list.get(i).get("cretime"), list.get(i).get("cretimestr"));
+        }
         String mincretime = (String)list.get(list.size() - 1).get("cretimestr");
         mincretime = mincretime.split(" ")[0];
         daylist = Tool.createRangeMonth(Tool.strToDate(mincretime), Tool.getNowDate(), size, true);
