@@ -1,5 +1,0 @@
---getTop
-select *
-from dev_controllog
-order by cretime DESC
-LIMIT :size
