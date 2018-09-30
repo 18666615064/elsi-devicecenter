@@ -33,10 +33,10 @@ public class DatasaveHandler implements Handler{
     private ScriptEngine engine = manager.getEngineByName("javascript");
 
     @Value("${config.es.data-event}")
-    private static String esDataEvent;
+    private String esDataEvent;
 
     @Value("${config.es.login-event}")
-    private static String esLoginEvent;
+    private String esLoginEvent;
 
     @PostConstruct
     public void init() {
