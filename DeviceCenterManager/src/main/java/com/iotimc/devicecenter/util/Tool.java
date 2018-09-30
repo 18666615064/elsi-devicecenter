@@ -123,7 +123,19 @@ public class Tool {
                     else value = "false";
                     break;
                 case "integer":
-                    value = String.valueOf(Integer.parseInt(value, 16));
+                    int val = Integer.parseInt(value, 16);
+                    int len = value.length() % 2 == 0 ?value.length() : (value.length() + 1);
+                    int lx = len / 2 * 4;
+                    String binary = tobinary(val, lx/2);
+                    if(binary.startsWith("0")) {
+                        // 正数转换
+                        value = String.valueOf(Integer.parseInt(value, 16));
+                    } else {
+                        // 负数转换
+                        int max = (int)Math.pow(2, lx * 2);
+                        value = String.valueOf(val - max);
+                    }
+
                     break;
             }
         }
@@ -178,7 +190,23 @@ public class Tool {
         return list;
     }
 
-    public static void main(String args[]) {
+    private static String tobinary(int number, int length) {
+        StringBuilder sBuilder = new StringBuilder();
+        for (int i = 0; i < 32; i++){
+            sBuilder.append(number & 1);
+            number = number >>> 1;
+        }
+        return sBuilder.reverse().substring(32 - length * 4);
+    }
 
+    public static void main(String args[]) {
+        String value = "0e";
+        int val = Integer.parseInt(value, 16);
+        int len = value.length() % 2 == 0 ?value.length() : (value.length() + 1);
+        int lx = len / 2 * 4;
+        int max = (int)Math.pow(2, lx * 2);
+        System.out.println(lx);
+        System.out.println(val - max);
+        System.out.println(tobinary(val, lx/2));
     }
 }
