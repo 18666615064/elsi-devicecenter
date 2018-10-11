@@ -46,4 +46,9 @@ public class DeviceServiceImpl implements DeviceService {
     public String getStatus(String imei, String platformid) {
         return null;
     }
+
+    @Override
+    public String getStatus(String imei, String platformid, int companyid, int productid) {
+        return null;
+    }
 }

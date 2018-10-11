@@ -1,0 +1,12 @@
+--getList
+select
+  id,
+  devicefk,
+  imei,
+  date_format(cretime , '%Y-%m-%d %H:%i:%s') as cretime,
+  type,
+  case type when 0 then '下线' when 1 then '上线' end as typecn
+from dev_loginlog
+  where imei = :imei
+    and cretime <= :endtime and cretime >= :starttime
+order by cretime DESC

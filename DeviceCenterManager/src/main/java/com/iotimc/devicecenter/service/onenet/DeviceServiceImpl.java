@@ -140,8 +140,13 @@ public class DeviceServiceImpl implements DeviceService{
     @Override
     public String getStatus(String imei, String platformid) {
         DeviceCache device = DeviceListener.getDeviceByImei(imei);
-        ProductConfig product = ConfigListener.getProductById(device.getProductfk());
-        CompanyConfig company = ConfigListener.getCompanyById(device.getCompanyfk());
+        return getStatus(imei, platformid, device.getCompanyfk(), device.getProductfk());
+    }
+
+    @Override
+    public String getStatus(String imei, String platformid, int companyid, int productid) {
+        ProductConfig product = ConfigListener.getProductById(productid);
+        CompanyConfig company = ConfigListener.getCompanyById(companyid);
         return OnenetUtil.getDeviceStatus(company.getBaseurl(), product.getApikey(), platformid);
     }
 }

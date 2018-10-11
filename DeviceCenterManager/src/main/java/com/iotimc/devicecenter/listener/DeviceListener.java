@@ -6,7 +6,9 @@ import com.iotimc.devicecenter.dao.DevDeviceEntityRepository;
 import com.iotimc.devicecenter.domain.CompanyConfig;
 import com.iotimc.devicecenter.domain.DevDeviceEntity;
 import com.iotimc.devicecenter.domain.DeviceCache;
+import com.iotimc.devicecenter.domain.ProductConfig;
 import com.iotimc.devicecenter.service.DeviceService;
+import com.iotimc.devicecenter.service.onenet.util.OnenetUtil;
 import com.iotimc.devicecenter.util.RedisUtil;
 import com.iotimc.devicecenter.util.Tool;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import sun.misc.Cache;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -155,7 +158,7 @@ public class DeviceListener implements InitializingBean{
     private static DeviceCache refreshOnlineStatus(DevDeviceEntity item) {
         CompanyConfig company = ConfigListener.getCompanyById(item.getCompanyfk());
         if(company.getSystemname().equalsIgnoreCase("onenet")) {
-            String resultStr = onenetDevice.getStatus(item.getImei(), item.getPlatformid());
+            String resultStr = onenetDevice.getStatus(item.getImei(), item.getPlatformid(), item.getCompanyfk(), item.getProductfk());
             JSONObject result = (JSONObject) JSONObject.parse(resultStr);
             if(result.getInteger("errno") == 0 && result.containsKey("data")) {
                 JSONArray devices = result.getJSONObject("data").getJSONArray("devices");
@@ -256,11 +259,12 @@ public class DeviceListener implements InitializingBean{
      * @param type
      * @param uuid
      */
-    public static void putCommandCache(String imei, String propname, String type, String uuid, Integer controllogid) {
+    public synchronized static void putCommandCache(String imei, String propname, String type, String uuid, Integer controllogid) {
+        DeviceCache device = getDeviceByImei(imei);
+        CompanyConfig company = ConfigListener.getCompanyById(device.getCompanyfk());
+        ProductConfig product = ConfigListener.getProductById(device.getProductfk());
         if(!redisUtil.hHasKey(COMMCACHE, imei)) {
             //创建缓存
-            DeviceCache device = getDeviceByImei(imei);
-            CompanyConfig company = ConfigListener.getCompanyById(device.getCompanyfk());
             JSONObject cache = new JSONObject();
             cache.put("imei", imei);
             cache.put("devicefk", device.getId());
@@ -268,12 +272,47 @@ public class DeviceListener implements InitializingBean{
             cache.put("platform", company.getSystemname());
             cache.put("productfk", device.getProductfk());
             cache.put("controllist", new JSONArray());
-            cache.put("controllogid", controllogid);
             redisUtil.hset(COMMCACHE, imei, cache);
         }
         JSONObject cache = (JSONObject) redisUtil.hget(COMMCACHE, imei);
         JSONArray controllist = cache.getJSONArray("controllist");
         //TODO 检查是否存在同样的命令，如果有则覆盖,并记录起操作日志
+        Iterator<Object> it = controllist.iterator();
+        while(it.hasNext()) {
+            JSONObject item = (JSONObject) it.next();
+            if(item.getString("propname").equalsIgnoreCase(propname) && item.getString("type").equalsIgnoreCase(type)) {
+                // 执行取消
+                OnenetUtil.deleteOffline(company.getBaseurl(), product.getApikey(), item.getString("uuid"), imei);
+                it.remove();
+            }
+        }
+        JSONObject item = new JSONObject();
+        item.put("type", type);
+        item.put("uuid", uuid);
+        item.put("propname", propname);
+        item.put("controllogid", controllogid);
+        controllist.add(item);
+        redisUtil.hset(COMMCACHE, imei, cache);
+    }
 
+    /**
+     * 删除某个执行中的命令
+     * @param imei
+     * @param uuid
+     * @return
+     */
+    public synchronized static JSONObject removeCommandCache(String imei, String uuid) {
+        if(redisUtil.hHasKey(COMMCACHE, imei)) {
+            JSONObject item = (JSONObject)redisUtil.hget(COMMCACHE, imei);
+            JSONArray controllist = item.getJSONArray("controllist");
+            for(int idx = 0; idx < controllist.size(); idx++) {
+                if(controllist.getJSONObject(idx).getString("uuid").equalsIgnoreCase(uuid)) {
+                    controllist.remove(idx);
+                    redisUtil.hset(COMMCACHE, imei, item);
+                    return item;
+                }
+            }
+        }
+        return null;
     }
 }

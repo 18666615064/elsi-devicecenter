@@ -6,6 +6,9 @@ import org.apache.commons.lang.StringUtils;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +48,14 @@ public class Tool {
     public static Long getTimestampLong() {
         return getNowDate().getTime();
     }
+
+    /**
+     * 活动线程为核心数+1个
+     * 至少128个等待线程
+     * 否则使用核心数的立方作为最大等待线程
+     * 每条线程10分钟等待
+     */
+    private static ThreadPoolExecutor pool = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() + 1, Math.max(128, (int)Math.pow(Runtime.getRuntime().availableProcessors(), 3)), 10, TimeUnit.MINUTES, new LinkedBlockingDeque<>());
 
     public static Date strToDate(String str) {
         try {
@@ -208,5 +219,13 @@ public class Tool {
         System.out.println(lx);
         System.out.println(val - max);
         System.out.println(tobinary(val, lx/2));
+    }
+
+    /**
+     * 线程池执行任务
+     * @param thread
+     */
+    public static void execute(Runnable thread) {
+        pool.execute(thread);
     }
 }

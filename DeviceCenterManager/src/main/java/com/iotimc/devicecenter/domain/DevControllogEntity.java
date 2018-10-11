@@ -18,6 +18,7 @@ public class DevControllogEntity {
     private String value;
     private String imei;
     private String asyncuuid;
+    private String asyncresult;
 
     @Id
     @Column(name = "id")
@@ -165,5 +166,15 @@ public class DevControllogEntity {
 
     public void setAsyncuuid(String asyncuuid) {
         this.asyncuuid = asyncuuid;
+    }
+
+    @Basic
+    @Column(name = "asyncresult")
+    public String getAsyncresult() {
+        return asyncresult;
+    }
+
+    public void setAsyncresult(String asyncresult) {
+        this.asyncresult = asyncresult;
     }
 }

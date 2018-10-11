@@ -34,3 +34,42 @@ where log.name = :name
       and date(log.cretime) < MAKEDATE(year(curdate()),dayofyear(CURDATE()) - day(curdate()) + 1)
       and (select id from dev_sensorlog child where child.name = :name and child.imei = :imei and date_format(child.cretime, '%Y-%m') = date_format(log.cretime, '%Y-%m') order by child.cretime desc limit 1) = log.id
 order by cretime desc
+
+--getLastGroup
+select log.id,
+  log.name,
+  log.dsid,
+  log.imei,
+  log.value,
+  log.devicefk,
+  log.productdtlfk,
+  unix_timestamp(log.cretime) * 1000 as cretime,
+  date_format(log.cretime , '%Y-%m-%d %H:%i:%s') as cretimestr
+from dev_sensorlog log
+  inner join (
+               select * from (select cretime from dev_sensorlog
+               where imei = :imei
+                     and name = :name
+                              order by cretime desc
+                              limit :size) tmp
+               order by cretime asc limit 1
+             ) tmp on log.cretime > tmp.cretime
+where log.imei = :imei
+order by log.cretime asc
+
+--getList
+select id,
+  productdtlfk,
+  devicefk,
+  value,
+  dsid,
+  name,
+  date_format(cretime , '%Y-%m-%d %H:%i:%s') as cretime,
+  imei
+from dev_sensorlog
+where imei = :imei
+  and cretime >= :starttime and cretime <= :endtime
+<#if name??>
+  and name = :name
+</#if>
+order by cretime desc

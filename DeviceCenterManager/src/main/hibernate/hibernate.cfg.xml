@@ -4,7 +4,7 @@
     "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <property name="connection.url">jdbc:mysql://localhost:3306/elsi-trunk</property>
+    <property name="connection.url">jdbc:mysql://rm-wz97r87bwuro0g5a66o.mysql.rds.aliyuncs.com:3306/elsi-trunk</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
       <mapping class="com.iotimc.devicecenter.domain.DevCompanyEntity"/>
     <mapping class="com.iotimc.devicecenter.domain.DevDeviceEntity"/>
@@ -15,7 +15,9 @@
     <mapping class="com.iotimc.devicecenter.domain.DevTokenuserproductEntity"/>
       <mapping class="com.iotimc.devicecenter.domain.DevControllogEntity"/>
       <mapping class="com.iotimc.devicecenter.domain.DevLoginlogEntity"/>
-      <!-- <property name="connection.username"/> -->
+    <mapping class="com.iotimc.devicecenter.domain.DevTemplateEntity"/>
+    <mapping class="com.iotimc.devicecenter.domain.DevTimeTaskEntity"/>
+    <!-- <property name="connection.username"/> -->
     <!-- <property name="connection.password"/> -->
 
     <!-- DB schema will be updated if needed -->

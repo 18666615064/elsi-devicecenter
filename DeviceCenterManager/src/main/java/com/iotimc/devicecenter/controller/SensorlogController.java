@@ -3,6 +3,7 @@ package com.iotimc.devicecenter.controller;
 import com.iotimc.devicecenter.service.SensorlogService;
 import com.iotimc.elsi.auth.annotation.NoneAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +22,10 @@ public class SensorlogController {
     /**
      * 根据时间段获取相应设备的相应属性的读数数据
      */
-    public void getSensorlog() {}
+    @RequestMapping(value = "/sensorlog", method = RequestMethod.GET)
+    public List<Map> getSensorlog(@RequestParam("starttime") String starttime, @RequestParam("endtime") String endtime, @RequestParam("imei") String imei, @RequestParam(value = "name", required = false) String name) {
+        return sensorlogService.getSensorlog(starttime, endtime, imei, name);
+    }
 
     /**
      * 获取读数数据统计信息
@@ -46,7 +50,21 @@ public class SensorlogController {
     /**
      * 获取时间段内登录信息
      */
-    public void getLoginlog() {
+    @RequestMapping(value = "/loginlog", method = RequestMethod.GET)
+    public List<Map> getLoginlog(@RequestParam("starttime") String starttime, @RequestParam("endtime") String endtime, @RequestParam("imei") String imei) {
+        return sensorlogService.getLoginlog(starttime, endtime, imei);
+    }
 
+    /**
+     *
+     * @param size 数据组数
+     * @param imei 设备imei
+     * @param name 分组依据
+     * @return
+     */
+    @RequestMapping(value = "/group", method = RequestMethod.GET)
+    public List<Map> getLastSensorlogGroup(@RequestParam(value = "size", required = false) Integer size, @RequestParam("imei") String imei, @RequestParam(value = "name") String name) {
+        size = size == null ? 10 : size;
+        return sensorlogService.getLastGroup(imei, size, name);
     }
 }

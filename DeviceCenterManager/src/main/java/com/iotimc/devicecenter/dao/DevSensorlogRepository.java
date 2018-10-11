@@ -14,4 +14,10 @@ public interface DevSensorlogRepository extends GenericJpaRepository<DevSensorlo
 
     @TemplateQuery
     List<Map> getLast(@Param("imei") String imei, @Param("name") String name, @Param("size") int size);
+
+    @TemplateQuery
+    List<Map> getLastGroup(@Param("imei") String imei, @Param("name") String name, @Param("size") int size);
+
+    @TemplateQuery
+    List<Map> getList(@Param("starttime") String starttime, @Param("endtime") String endtime, @Param("imei") String imei, @Param("name") String name);
 }

@@ -1,0 +1,7 @@
+--getRunList
+select *
+from dev_time_task
+where starttime < now() and endtime > now()
+<#if id??>
+and id = :id
+</#if>

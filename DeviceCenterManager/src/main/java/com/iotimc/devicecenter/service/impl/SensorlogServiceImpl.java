@@ -1,5 +1,6 @@
 package com.iotimc.devicecenter.service.impl;
 
+import com.iotimc.devicecenter.dao.DevLoginlogRepository;
 import com.iotimc.devicecenter.dao.DevSensorlogRepository;
 import com.iotimc.devicecenter.domain.DevSensorlogEntity;
 import com.iotimc.devicecenter.service.SensorlogService;
@@ -16,6 +17,9 @@ public class SensorlogServiceImpl implements SensorlogService {
     @Autowired
     private DevSensorlogRepository devSensorlogRepository;
 
+    @Autowired
+    private DevLoginlogRepository devLoginlogRepository;
+
     @Override
     public List<Map> getTop(String imei, int size, String name, String value) {
         return devSensorlogRepository.getTop(imei, name, value, size);
@@ -26,9 +30,6 @@ public class SensorlogServiceImpl implements SensorlogService {
         List<Map> list = devSensorlogRepository.getLast(imei, name, size);
         List<String> daylist = new ArrayList<>();
         if(list.isEmpty()) return list;
-        for(int i=0; i<list.size(); i++) {
-            log.info("List:[{}][{}][{}]", list.get(i).get("id"), list.get(i).get("cretime"), list.get(i).get("cretimestr"));
-        }
         String mincretime = (String)list.get(list.size() - 1).get("cretimestr");
         mincretime = mincretime.split(" ")[0];
         daylist = Tool.createRangeMonth(Tool.strToDate(mincretime), Tool.getNowDate(), size, true);
@@ -60,5 +61,58 @@ public class SensorlogServiceImpl implements SensorlogService {
             }
         }
         return list;
+    }
+
+    @Override
+    public List<Map> getLastGroup(String imei, int size, String name) {
+        size += 1;
+        List<Map> list = devSensorlogRepository.getLastGroup(imei, name, size);
+        List<Map> result = new ArrayList<>();
+        Map<String, Object> tmp = new HashMap<>();
+        int listSize = list.size();
+        for(int idx = 0; idx < listSize; idx++) {
+            Map item = list.get(idx);
+            if(tmp.containsKey("TMP_")) {
+                long tmp_ = Long.parseLong(String.valueOf(tmp.get("TMP_")));
+                long cretime = Long.parseLong(String.valueOf(item.get("cretime")));
+                tmp_ = cretime - tmp_;
+                // 时间差
+                // log.info("[{}:{}]", tmp_, tmp_ / 1000 / 60 / 2);
+                tmp.put("TMP_", cretime);
+                if(tmp_ / 1000 / 60 / 1 > 0) {
+                    tmp.remove("TMP_");
+                    result.add(tmp);
+                    tmp = new HashMap<>();
+                    idx--;
+                    continue;
+                    // 如果前后记录时间差超过1分钟就强制分组
+                } else {
+                    tmp.put(item.get("name").toString(), item);
+                }
+            } else {
+                // 存放上一条记录的时间
+                tmp.put("TMP_", item.get("cretime"));
+                tmp.put(item.get("name").toString(), item);
+            }
+            if(item.get("name").toString().equalsIgnoreCase(name) || idx == listSize - 1) {
+                tmp.remove("TMP_");
+                result.add(tmp);
+                tmp = new HashMap<>();
+            }
+        }
+        Collections.reverse(result);
+        result = result.subList(0, size - 1);
+        Collections.reverse(result);
+        return result;
+    }
+
+    @Override
+    public List<Map> getLoginlog(String starttime, String endtime, String imei) {
+        return devLoginlogRepository.getList(starttime, endtime, imei);
+    }
+
+    @Override
+    public List<Map> getSensorlog(String starttime, String endtime, String imei, String name) {
+        return devSensorlogRepository.getList(starttime, endtime, imei, name);
     }
 }

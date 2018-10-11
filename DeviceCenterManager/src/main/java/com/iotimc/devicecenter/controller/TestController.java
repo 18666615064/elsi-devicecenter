@@ -69,17 +69,17 @@ public class TestController {
     }
 
     @RequestMapping(value = "/sendws", method = RequestMethod.GET)
-    public ResponseEntity<HandleEntitySuccessMsg> sendWS() {
+    public ResponseEntity<HandleEntitySuccessMsg> sendWS(@RequestParam("value")String value, @RequestParam("name")String name) {
         DevSensorlogEntity entity = new DevSensorlogEntity();
         entity.setCretime(Tool.long2timestamp(1537431316000L));
-        entity.setDevicefk(3);
-        entity.setDsid("3200_0_5501");
-        entity.setImei("869664030006491");
-        entity.setName("water_load");
-        entity.setProductdtlfk(16);
-        entity.setValue("8");
+        entity.setDevicefk(4);
+        entity.setDsid("31000_0_41005");
+        entity.setImei("868194030006524");
+        entity.setName(name);
+        entity.setProductdtlfk(41);
+        entity.setValue(value);
         WebSocketMessage message = new WebSocketMessage("dataLog", ((JSONObject)JSONObject.toJSON(entity)));
-        WebsocketUtil.send("869664030006491", message);
+        WebsocketUtil.send("868194030006524", message);
         return ResponseEntity.ok(new HandleEntitySuccessMsg("0"));
     }
 }

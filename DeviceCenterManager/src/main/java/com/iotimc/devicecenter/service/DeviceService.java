@@ -60,4 +60,13 @@ public interface DeviceService {
      */
     String getStatus(String imei, String platformid);
 
+    /**
+     * 获取状态，提供给没有缓存设备用的
+     * @param imei
+     * @param platformid
+     * @param companyid
+     * @param productid
+     * @return
+     */
+    String getStatus(String imei, String platformid, int companyid, int productid);
 }

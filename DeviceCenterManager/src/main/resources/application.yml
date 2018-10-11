@@ -3,14 +3,14 @@ spring:
     name: ${APPLICATION_NAME:devicecenter_dev}
   datasource:
     #配置数据库连接地址
-    url: ${DATASOURCE_URL:jdbc:mysql://127.0.0.1:3306/elsi-trunk?useUnicode=true&characterEncoding=utf-8}
-    username: ${DATASOURCE_USERNAMR:root}
-    password: ${DATASOURCE_PASSWORD:123}
+    url: ${DATASOURCE_URL:jdbc:mysql://rm-wz97r87bwuro0g5a66o.mysql.rds.aliyuncs.com:3306/elsi-trunk?useUnicode=true&characterEncoding=utf-8}
+    username: ${DATASOURCE_USERNAMR:elsi-trunk}
+    password: ${DATASOURCE_PASSWORD:imcsoft.12345}
   redis:
     #是否启用
     enable: true
     #单机用的host/port
-    host: ${REDIS_HOST:192.168.20.240}
+    host: ${REDIS_HOST:192.168.20.245}
     port: ${REDIS_PORT:6379}
     #超时
     timeout: 16000
@@ -28,7 +28,7 @@ spring:
     #是否启用
     enable: true
     #服务地址
-    host: ${MQ_HOST:192.168.20.240}
+    host: ${MQ_HOST:192.168.20.245}
     port: ${MQ_PORT:5672}
     username: ${MQ_USER:imcsoft}
     password: ${MQ_PASS:iotimc.12345}

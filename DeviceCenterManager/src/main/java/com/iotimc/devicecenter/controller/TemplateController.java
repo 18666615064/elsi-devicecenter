@@ -1,6 +1,7 @@
 package com.iotimc.devicecenter.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.iotimc.devicecenter.util.Tool;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class TemplateController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public void add(@RequestBody JSONObject data) {
+        String[] empty = Tool.isBlanks(data, new String[] {"html"});
 
     }
 

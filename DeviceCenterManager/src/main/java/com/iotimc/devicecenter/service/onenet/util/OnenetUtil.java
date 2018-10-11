@@ -201,10 +201,14 @@ public class OnenetUtil {
         data.add(data0);
         params.put("data", data);
         String result = doPost(url + "/nbiot/offline", params, httpParams, apikey);
-        //TODO 取出uuid
-        String uuid = "";
-        DevControllogEntity loz = saveControllog(imei, "send", dtl.getName(), value, (int) (System.currentTimeMillis() - before), result, uuid);
-        DeviceListener.putCommandCache(imei, "send", dtl.getName(), uuid, loz.getId());
+        JSONObject resultJson = (JSONObject) JSONObject.parse(result);
+        if(resultJson.getString("errno").equalsIgnoreCase("0")) {
+            String uuid = resultJson.getJSONObject("data").getString("uuid");
+            DevControllogEntity loz = saveControllog(imei, "send", dtl.getName(), value, (int) (System.currentTimeMillis() - before), result, uuid);
+            DeviceListener.putCommandCache(imei, "send", dtl.getName(), uuid, loz.getId());
+        } else {
+            DevControllogEntity loz = saveControllog(imei, "send", dtl.getName(), value, (int) (System.currentTimeMillis() - before), result, null);
+        }
         return result;
     }
 
