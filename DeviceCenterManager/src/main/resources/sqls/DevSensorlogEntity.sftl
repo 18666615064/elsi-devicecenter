@@ -57,6 +57,28 @@ from dev_sensorlog log
 where log.imei = :imei
 order by log.cretime asc
 
+--getLastGroupByTime
+select log.id,
+  log.name,
+  log.dsid,
+  log.imei,
+  log.value,
+  log.devicefk,
+  log.productdtlfk,
+  unix_timestamp(log.cretime) * 1000 as cretime,
+  date_format(log.cretime , '%Y-%m-%d %H:%i:%s') as cretimestr
+from dev_sensorlog log
+  inner join (
+               select * from (select cretime from dev_sensorlog
+               where imei = :imei
+                     and name = :name and cretime >= :starttime and cretime <= :endtime
+                              order by cretime desc
+                            ) tmp
+               order by cretime asc limit 1
+             ) tmp on log.cretime > tmp.cretime and log.cretime < :endtime
+where log.imei = :imei
+order by log.cretime asc
+
 --getList
 select id,
   productdtlfk,

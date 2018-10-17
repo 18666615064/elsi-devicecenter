@@ -19,9 +19,11 @@ public class DevControllogEntity {
     private String imei;
     private String asyncuuid;
     private String asyncresult;
+    private Integer asyncresultstatus;
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -176,5 +178,15 @@ public class DevControllogEntity {
 
     public void setAsyncresult(String asyncresult) {
         this.asyncresult = asyncresult;
+    }
+
+    @Basic
+    @Column(name = "asyncresultstatus")
+    public Integer getAsyncresultstatus() {
+        return asyncresultstatus;
+    }
+
+    public void setAsyncresultstatus(Integer asyncresultstatus) {
+        this.asyncresultstatus = asyncresultstatus;
     }
 }

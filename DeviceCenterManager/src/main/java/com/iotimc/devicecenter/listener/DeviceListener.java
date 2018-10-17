@@ -2,11 +2,9 @@ package com.iotimc.devicecenter.listener;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.iotimc.devicecenter.dao.DevControllogRepository;
 import com.iotimc.devicecenter.dao.DevDeviceEntityRepository;
-import com.iotimc.devicecenter.domain.CompanyConfig;
-import com.iotimc.devicecenter.domain.DevDeviceEntity;
-import com.iotimc.devicecenter.domain.DeviceCache;
-import com.iotimc.devicecenter.domain.ProductConfig;
+import com.iotimc.devicecenter.domain.*;
 import com.iotimc.devicecenter.service.DeviceService;
 import com.iotimc.devicecenter.service.onenet.util.OnenetUtil;
 import com.iotimc.devicecenter.util.RedisUtil;
@@ -46,6 +44,10 @@ public class DeviceListener implements InitializingBean{
     private DevDeviceEntityRepository devDeviceEntityRepository_prv;
     private static DevDeviceEntityRepository devDeviceEntityRepository;
 
+    @Autowired
+    private DevControllogRepository devControllogRepository_prv;
+    private static DevControllogRepository devControllogRepository;
+
     @Qualifier("onenet")
     @Autowired
     private DeviceService onenetDevice_prv;
@@ -64,6 +66,7 @@ public class DeviceListener implements InitializingBean{
     public void afterPropertiesSet() throws Exception {
         redisUtil = redisUtil_prv;
         devDeviceEntityRepository = devDeviceEntityRepository_prv;
+        devControllogRepository = devControllogRepository_prv;
         onenetDevice = onenetDevice_prv;
         easyiotDevice = easyiotDevice_prv;
         List<DevDeviceEntity> list = devDeviceEntityRepository.getAllList();
@@ -283,6 +286,12 @@ public class DeviceListener implements InitializingBean{
             if(item.getString("propname").equalsIgnoreCase(propname) && item.getString("type").equalsIgnoreCase(type)) {
                 // 执行取消
                 OnenetUtil.deleteOffline(company.getBaseurl(), product.getApikey(), item.getString("uuid"), imei);
+                Optional<DevControllogEntity> optional = devControllogRepository.findById(item.getInteger("controllogid"));
+                if(optional != null) {
+                    DevControllogEntity entity = optional.get();
+                    entity.setAsyncresultstatus(2);
+                    devControllogRepository.save(entity);
+                }
                 it.remove();
             }
         }

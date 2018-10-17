@@ -81,7 +81,7 @@ public class DeviceServiceImpl implements DeviceService{
         String resultStr = OnenetUtil.send(company.getBaseurl(), product.getApikey(), device.getImei(), prop.getObjid(), prop.getResid(), prop.getInsid(), data.get("value"),
                 data.containsKey("timeout")?data.getInteger("timeout"):null);
         JSONObject result = (JSONObject) JSONObject.parse(resultStr);
-        return result.getString("errno").equalsIgnoreCase("0")?result.getString("uuid"):result.getString("error");
+        return result.getString("errno").equalsIgnoreCase("0")?result.getJSONObject("data").getString("uuid"):result.getString("error");
     }
 
     @Override
@@ -116,7 +116,7 @@ public class DeviceServiceImpl implements DeviceService{
         if(prop == null) return "找不到属性";
         String resultStr = OnenetUtil.readProps(company.getBaseurl(), product.getApikey(), device.getImei(), prop.getObjid(), prop.getResid(), prop.getInsid());
         JSONObject result = (JSONObject) JSONObject.parse(resultStr);
-        return result.getString("errno").equalsIgnoreCase("0")?result.getString("uuid"):result.getString("error");
+        return result.getString("errno").equalsIgnoreCase("0")?result.getJSONObject("data").getString("uuid"):result.getString("error");
     }
 
     @Override

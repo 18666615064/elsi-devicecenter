@@ -103,6 +103,7 @@ public class ConfigListener implements InitializingBean{
             prop.setWriteable((String.valueOf(item.get("writeable")).equals("true")?Byte.parseByte("1"):Byte.parseByte("0")));
             //log.info("[{}][{}]:[{}]----[{}]", prop.getObjid(),prop.getName(),prop.getWriteable(),item.get("writeable"));
             prop.setIshex((Byte)item.get("ishex"));
+            prop.setEditable((String.valueOf(item.get("editable")).equals("true")?Byte.parseByte("1"):Byte.parseByte("0")));
             prop.setCorrect((String) item.get("correct"));
             product.getDtllist().put(prop.getName(), prop);
         });
@@ -211,6 +212,16 @@ public class ConfigListener implements InitializingBean{
         for(String key : dtllist.keySet()) {
             DevProductdtlEntity dtl = dtllist.get(key);
             if(dtl.getObjid().equals(objid) && dtl.getResid().equals(resid) && dtl.getInsid().equals(insid)) return dtl;
+        }
+        return null;
+    }
+
+    public static DevProductdtlEntity getPropByProductidName(Integer productfk, String name) {
+        ProductConfig product = getProductById(productfk);
+        if(product != null) {
+            Map<String, DevProductdtlEntity> dtllist = product.getDtllist();
+            if(dtllist != null)
+                return dtllist.get(name);
         }
         return null;
     }

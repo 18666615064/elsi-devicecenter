@@ -18,6 +18,7 @@ public class DevProductdtlEntity {
     private Byte writeable;
     private Byte ishex;
     private String correct;
+    private Byte editable;
 
     @Id
     @Column(name = "id")
@@ -186,5 +187,15 @@ public class DevProductdtlEntity {
 
     public void setCorrect(String correct) {
         this.correct = correct;
+    }
+
+    @Basic
+    @Column(name = "editable")
+    public Byte getEditable() {
+        return editable;
+    }
+
+    public void setEditable(Byte editable) {
+        this.editable = editable;
     }
 }

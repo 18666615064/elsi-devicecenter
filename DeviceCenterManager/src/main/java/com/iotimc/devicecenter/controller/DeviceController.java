@@ -151,7 +151,7 @@ public class DeviceController {
         } else if(company.getSystemname().equalsIgnoreCase("easyiot")) {
             result = easyiotDeviceService.send(data);
         }
-        return ResponseEntity.ok(Tool.isNumber(result)?new HandleEntitySuccessMsg("发送成功", result):new HandleEntitySuccessMsg("发送失败：" + result, "-1"));
+        return ResponseEntity.ok(Tool.isNumber(result)&&!result.equalsIgnoreCase("0")?new HandleEntitySuccessMsg("发送失败：" + result, "-1"):new HandleEntitySuccessMsg("发送成功", result));
     }
 
     /**

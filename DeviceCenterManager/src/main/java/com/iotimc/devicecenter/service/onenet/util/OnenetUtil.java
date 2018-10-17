@@ -205,7 +205,7 @@ public class OnenetUtil {
         if(resultJson.getString("errno").equalsIgnoreCase("0")) {
             String uuid = resultJson.getJSONObject("data").getString("uuid");
             DevControllogEntity loz = saveControllog(imei, "send", dtl.getName(), value, (int) (System.currentTimeMillis() - before), result, uuid);
-            DeviceListener.putCommandCache(imei, "send", dtl.getName(), uuid, loz.getId());
+            DeviceListener.putCommandCache(imei, dtl.getName(), "send", uuid, loz.getId());
         } else {
             DevControllogEntity loz = saveControllog(imei, "send", dtl.getName(), value, (int) (System.currentTimeMillis() - before), result, null);
         }
@@ -398,7 +398,7 @@ public class OnenetUtil {
             if (code == 200) {
                 return receive(conn);
             }
-            return "{\"errno\": \"" + code + "\"}";
+            return "{\"errno\": \"" + code + "\", \"message\":\"" + receive(conn, true) + "\"}";
         } catch (Exception e) {
             e.printStackTrace();
             return "{\"errno\": -1,\"error\": \"" + e.getMessage() + "\"}";
@@ -429,7 +429,7 @@ public class OnenetUtil {
             if (code == 200) {
                 return receive(conn);
             }
-            return "{\"errno\": \"" + code + "\"}";
+            return "{\"errno\": \"" + code + "\", \"message\":\"" + receive(conn, true) + "\"}";
         } catch (Exception e) {
             e.printStackTrace();
             return "{\"errno\":-1,\"error\": \"" + e.getMessage() + "\"}";
@@ -495,7 +495,7 @@ public class OnenetUtil {
             if (code == 200) {
                 return receive(conn);
             }
-            return "{\"errno\": \"" + code + "\"}";
+            return "{\"errno\": \"" + code + "\", \"message\":\"" + receive(conn, true) + "\"}";
         } catch (Exception e) {
             e.printStackTrace();
             return "{\"errno\":-1,\"error\": \"" + e.getMessage() + "\"}";
@@ -526,7 +526,7 @@ public class OnenetUtil {
             if (code == 200) {
                 return receive(conn);
             }
-            return "{\"errno\": \"" + code + "\"}";
+            return "{\"errno\": \"" + code + "\", \"message\":\"" + receive(conn, true) + "\"}";
         } catch(Exception e) {
             e.printStackTrace();
             return "{\"errno\":-1,\"error\": \"" + e.getMessage() + "\"}";
@@ -535,12 +535,24 @@ public class OnenetUtil {
 
     /**
      * 接收处理返回数据
-     *
-     * @param conn 连接信息
+     * @param conn
      * @return
      * @throws Exception
      */
     private static String receive(HttpURLConnection conn) throws Exception {
+        return receive(conn,false);
+    }
+
+    /**
+     * 接收处理返回数据
+     *
+     * @param conn 连接信息
+     * @param error 是否错误信息
+     * @return
+     * @throws Exception
+     */
+    private static String receive(HttpURLConnection conn, boolean error) throws Exception {
+        if(error) return "";
         InputStream is = conn.getInputStream();
         String result = "";
         byte[] buffer = new byte[2048];

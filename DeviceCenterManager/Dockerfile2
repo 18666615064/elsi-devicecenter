@@ -1,0 +1,17 @@
+FROM java:8-jre-alpine
+#安装maven
+RUN mkdir /var/tmp/maven
+RUN wget -P /var/tmp/maven http://apache.fayea.com/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+RUN tar xzf /var/tmp/maven/apache-maven-3.3.9-bin.tar.gz -C /var/tmp/maven
+RUN rm -rf /var/tmp/maven/apache-maven-3.3.9-bin.tar.gz
+ENV M2_HOME /var/tmp/maven/apache-maven-3.3.9
+RUN mvn package -B -DskipTests
+RUN mvn test
+VOLUME /tmp
+ADD /target/*.jar app.jar
+RUN sh -c 'touch /app.jar'
+EXPOSE 9797
+EXPOSE 8807
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+ENTRYPOINT ["java","-DLOGGER_HOME=/usr/log","-Djava.security.egd=file:/dev/./urandom","-Xdebug","-Xnoagent","-Djava.compiler=NONE","-Xrunjdwp:transport=dt_socket,suspend=n,address=9797,server=y","-jar","/app.jar"]

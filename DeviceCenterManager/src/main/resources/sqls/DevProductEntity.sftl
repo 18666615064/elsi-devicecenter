@@ -19,6 +19,7 @@ select
   dtl.ishex,
   dtl.writeable as writeable,
   dtl.correct,
+  dtl.editable,
   company.name as companyname,
   company.alias as companyalias,
   company.baseurl as baseurl,

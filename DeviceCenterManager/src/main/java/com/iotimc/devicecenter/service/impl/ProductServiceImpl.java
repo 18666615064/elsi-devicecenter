@@ -58,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
         for(int i=0; i<dtllist.size(); i++) {
             JSONObject item = dtllist.getJSONObject(i);
             String[] emptyNames = Tool.isBlanks(item, new String[]{"ishex", "type", "name", "objid", "resid", "insid", "alias", "writeable"});
-            if(emptyNames.length > 0) return "第" + (i + 1) + "个属性信息不全[" + Tool.joinString(emptyNames) + "]为空";
+            if(emptyNames.length > 0) return "第" + (i + 1) + "个属性信息不全,[" + Tool.joinString(emptyNames) + "]为空";
             String name = item.getString("name");
             String dsid = item.getString("objid") + "_" + item.getString("insid") + "_" + item.getString("resid");
             if(names.contains(name) || names.contains(dsid)) return "属性:" + name + "[" + dsid + "]配置重复";
@@ -71,8 +71,9 @@ public class ProductServiceImpl implements ProductService {
             DevProductdtlEntity dtl = new DevProductdtlEntity();
             dtl.setProductfk(product.getId());
             dtl.setIshex(item.getByte("ishex"));
+            if(!StringUtils.isBlank(item.getString("editable"))) dtl.setEditable(item.getByte("editable"));
             dtl.setType(item.getString("type"));
-            if(StringUtils.isBlank(item.getString("correct"))) dtl.setCorrect(item.getString("correct"));
+            if(!StringUtils.isBlank(item.getString("correct"))) dtl.setCorrect(item.getString("correct"));
             dtl.setName(item.getString("name"));
             dtl.setObjid(item.getInteger("objid"));
             dtl.setResid(item.getInteger("resid"));
@@ -80,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
             dtl.setAlias(item.getString("alias"));
             dtl.setWriteable(item.getByte("writeable"));
             dtl.setStatus("P");
-            if(StringUtils.isBlank(item.getString("notes")))dtl.setNotes(item.getString("notes"));
+            if(!StringUtils.isBlank(item.getString("notes")))dtl.setNotes(item.getString("notes"));
             devProductdtlEntityRepository.save(dtl);
         }
         ConfigListener.readProductConfig(product.getId());
@@ -131,6 +132,7 @@ public class ProductServiceImpl implements ProductService {
                 entity.setResid(data.getInteger("resid"));
                 entity.setName(data.getString("name"));
                 entity.setIshex(data.containsKey("ishex")?data.getByte("ishex"):0);
+                entity.setEditable(data.containsKey("editable")?data.getByte("editable"):0);
                 entity.setCorrect(data.containsKey("correct")?data.getString("correct"):null);
                 entity.setType(data.getString("type"));
                 entity.setProductfk(product.getId());
