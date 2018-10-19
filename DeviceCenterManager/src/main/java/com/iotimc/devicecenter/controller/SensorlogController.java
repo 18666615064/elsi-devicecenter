@@ -53,14 +53,6 @@ public class SensorlogController {
     }
 
     /**
-     * 获取时间段内登录信息
-     */
-    @RequestMapping(value = "/loginlog", method = RequestMethod.GET)
-    public List<Map> getLoginlog(@RequestParam("starttime") String starttime, @RequestParam("endtime") String endtime, @RequestParam("imei") String imei) {
-        return sensorlogService.getLoginlog(starttime, endtime, imei);
-    }
-
-    /**
      *
      * @param size 数据组数
      * @param imei 设备imei

@@ -24,9 +24,6 @@ public class SensorlogServiceImpl implements SensorlogService {
     @Autowired
     private DevSensorlogRepository devSensorlogRepository;
 
-    @Autowired
-    private DevLoginlogRepository devLoginlogRepository;
-
     @Override
     public List<Map> getTop(String imei, int size, String name, String value) {
         return devSensorlogRepository.getTop(imei, name, value, size);
@@ -122,11 +119,6 @@ public class SensorlogServiceImpl implements SensorlogService {
             Collections.reverse(result);
         }
         return result;
-    }
-
-    @Override
-    public List<Map> getLoginlog(String starttime, String endtime, String imei) {
-        return devLoginlogRepository.getList(starttime, endtime, imei);
     }
 
     @Override

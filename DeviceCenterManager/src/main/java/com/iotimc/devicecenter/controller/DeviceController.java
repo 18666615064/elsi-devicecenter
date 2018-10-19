@@ -213,7 +213,7 @@ public class DeviceController {
      */
     @RequestMapping(value = "/readsync", method = RequestMethod.PUT)
     public ResponseEntity<HandleEntitySuccessMsg> syncReadProp(@RequestBody JSONObject data) {
-        if(StringUtils.isBlank(data.getString("name")) || StringUtils.isBlank(data.getString("value"))
+        if(StringUtils.isBlank(data.getString("name"))
                 || (StringUtils.isBlank(data.getString("id")) && StringUtils.isBlank(data.getString("imei")))) {
             return ResponseEntity.ok(new HandleEntitySuccessMsg("参数不正确", "-1"));
         }
@@ -232,7 +232,7 @@ public class DeviceController {
         } else if(company.getSystemname().equalsIgnoreCase("easyiot")) {
             result = easyiotDeviceService.syncRead(data);
         }
-        return ResponseEntity.ok(Tool.isNumber(result)?new HandleEntitySuccessMsg("读取成功", result):new HandleEntitySuccessMsg("读取失败：" + result, "-1"));
+        return ResponseEntity.ok(new HandleEntitySuccessMsg("读取成功", result));
     }
 
     /**

@@ -10,5 +10,5 @@ import java.util.Map;
 
 public interface DevLoginlogRepository extends GenericJpaRepository<DevLoginlogEntity, Integer> {
     @TemplateQuery
-    List<Map> getList(@Param("starttime") String starttime, @Param("endtime") String endtime, @Param("imei") String imei);
+    List<Map> getList(@Param("starttime") String starttime, @Param("endtime") String endtime, @Param("imei") String imei, @Param("size") int size);
 }

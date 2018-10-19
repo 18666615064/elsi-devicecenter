@@ -8,5 +8,8 @@ select
   case type when 0 then '下线' when 1 then '上线' end as typecn
 from dev_loginlog
   where imei = :imei
-    and cretime <= :endtime and cretime >= :starttime
+    <#if starttime??>
+        and cretime <= :endtime and cretime >= :starttime
+    </#if>
+
 order by cretime DESC

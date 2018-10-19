@@ -267,7 +267,7 @@ public class OnenetUtil {
      * @param insid
      * @return
      */
-    public static String readPropsSync(String url, String apikey, String imei, Integer objid, Integer resid, Byte insid, Integer timeout) {
+    public static String readProps(String url, String apikey, String imei, Integer objid, Integer resid, Byte insid, Integer timeout) {
         Map<String, String> httpParams = new HashMap();
         httpParams.put("imei", imei);
         httpParams.put("obj_id", String.valueOf(objid));
@@ -291,7 +291,7 @@ public class OnenetUtil {
      * @param insid
      * @return
      */
-    public static String readProps(String url, String apikey, String imei, Integer objid, Integer resid, Byte insid) {
+    public static String readPropsSync(String url, String apikey, String imei, Integer objid, Integer resid, Byte insid) {
         long before = System.currentTimeMillis();
         DevProductdtlEntity prop = ConfigListener.getPropByDevImeiDsid(imei, objid, resid, insid);
         Map<String, String> httpParams = new HashMap();
@@ -314,12 +314,12 @@ public class OnenetUtil {
      * @param dsid
      * @return
      */
-    public static String readProps(String url, String apikey, String imei, String dsid) {
+    public static String readPropsSync(String url, String apikey, String imei, String dsid) {
         if (dsid == null) return "{\"error\": \"属性名不存在\", \"errno\": -1}";
         Integer objid = Integer.parseInt(dsid.split("_")[0]);
         Byte insid = Byte.parseByte(dsid.split("_")[1]);
         Integer resid = Integer.parseInt(dsid.split("_")[2]);
-        String result = readProps(url, apikey, imei, objid, resid, insid);
+        String result = readPropsSync(url, apikey, imei, objid, resid, insid);
 
         return result;
     }

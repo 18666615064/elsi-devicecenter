@@ -114,7 +114,7 @@ public class DeviceServiceImpl implements DeviceService{
         ProductConfig product = ConfigListener.getProductById(device.getProductfk());
         DevProductdtlEntity prop = ConfigListener.getPropByDevImeiName(device.getImei(), data.getString("name"));
         if(prop == null) return "找不到属性";
-        String resultStr = OnenetUtil.readProps(company.getBaseurl(), product.getApikey(), device.getImei(), prop.getObjid(), prop.getResid(), prop.getInsid());
+        String resultStr = OnenetUtil.readProps(company.getBaseurl(), product.getApikey(), device.getImei(), prop.getObjid(), prop.getResid(), prop.getInsid(), data.containsKey("timeout")?data.getInteger("timeout"):null);
         JSONObject result = (JSONObject) JSONObject.parse(resultStr);
         return result.getString("errno").equalsIgnoreCase("0")?result.getJSONObject("data").getString("uuid"):result.getString("error");
     }
@@ -131,10 +131,9 @@ public class DeviceServiceImpl implements DeviceService{
         ProductConfig product = ConfigListener.getProductById(device.getProductfk());
         DevProductdtlEntity prop = ConfigListener.getPropByDevImeiName(device.getImei(), data.getString("name"));
         if(prop == null) return "找不到属性";
-        String resultStr = OnenetUtil.readPropsSync(company.getBaseurl(), product.getApikey(), device.getImei(), prop.getObjid(), prop.getResid(), prop.getInsid(),
-                data.containsKey("timeout")?data.getInteger("timeout"):null);
+        String resultStr = OnenetUtil.readPropsSync(company.getBaseurl(), product.getApikey(), device.getImei(), prop.getObjid(), prop.getResid(), prop.getInsid());
         JSONObject result = (JSONObject) JSONObject.parse(resultStr);
-        return result.getString("errno").equalsIgnoreCase("0")?"0":result.getString("error");
+        return result.getString("errno").equalsIgnoreCase("0")?result.getString("data"):result.getString("error");
     }
 
     @Override
